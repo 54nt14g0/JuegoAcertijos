@@ -15,13 +15,13 @@ public class Usuario {
     private String nombre;
     @Column
     private LocalDate fechaNacimiento;
-    @Column
+    @Column (nullable = false)
     private String pass;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
-    @Column
-    private boolean admin;
+    @Column(nullable = false)
+    private boolean isAdmin = false;
     @Column
     private String progreso;
 
@@ -66,8 +66,8 @@ public class Usuario {
         this.email = email;
     }
 
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public void setProgreso(String progreso) {
@@ -96,7 +96,7 @@ public class Usuario {
     }
 
     public boolean isAdmin() {
-        return admin;
+        return isAdmin;
     }
 
     public String getProgreso() {

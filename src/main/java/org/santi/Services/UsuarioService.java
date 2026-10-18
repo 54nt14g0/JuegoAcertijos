@@ -10,8 +10,7 @@ public interface UsuarioService {
 
     // CRUD USUARIO
 
-    String login(String email, String pass);
-    String register (String nombre, String pass, String email, LocalDate fechaNacimiento);
+
     String borrarCuenta (Long idUsuario);
     String actualizarDatosUsuario (Long idUsuario, String nombre, String email, LocalDate fechaNacimiento);
 
