@@ -21,7 +21,7 @@ public class Acertijo {
     private String imagenAcertijo;
 
     @Column
-    private int cantidadRespuestasCorrectasMinima;
+    private Float calificacion;
 
     @ManyToOne
     @JoinColumn (name = "nivel_id")
@@ -33,12 +33,6 @@ public class Acertijo {
     @OneToMany (mappedBy = "intentoRespuesta")
     private List <IntentoRespuesta> intentos = new ArrayList<>();
 
-    public Acertijo(String nombre, String descripcion, int cantidadRespuestasCorrectasMinima, Nivel nivel) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.cantidadRespuestasCorrectasMinima = cantidadRespuestasCorrectasMinima;
-        this.nivel = nivel;
-    }
 
     public Acertijo(String nombre, String descripcion, Nivel nivel) {
         this.nombre = nombre;
@@ -47,6 +41,23 @@ public class Acertijo {
     }
 
     public Acertijo() {
+    }
+
+
+    public List<IntentoRespuesta> getIntentos() {
+        return intentos;
+    }
+
+    public void setIntentos(List<IntentoRespuesta> intentos) {
+        this.intentos = intentos;
+    }
+
+    public Float getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(Float calificacion) {
+        this.calificacion = calificacion;
     }
 
     public Long getId() {
@@ -81,13 +92,6 @@ public class Acertijo {
         this.imagenAcertijo = imagenAcertijo;
     }
 
-    public int getCantidadRespuestasCorrectasMinima() {
-        return cantidadRespuestasCorrectasMinima;
-    }
-
-    public void setCantidadRespuestasCorrectasMinima(int cantidadRespuestasCorrectasMinima) {
-        this.cantidadRespuestasCorrectasMinima = cantidadRespuestasCorrectasMinima;
-    }
 
     public Nivel getNivel() {
         return nivel;

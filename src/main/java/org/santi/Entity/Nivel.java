@@ -25,8 +25,7 @@ public class Nivel {
     @Column
     private String descripcion;
 
-    @Column
-    private String Calificacion;
+
 
     //Aquí va un string con los nombres de los niveles RQEUISITO para que este nivel pueda jugarse
     @Column
@@ -35,9 +34,6 @@ public class Nivel {
     @Column
     private Long minimaCalificacionGanar;
 
-    // Este atributo determina si el Nivel hace parte de la secuencia o es aparte
-    @Column
-    private boolean isProgress;
 
     @ManyToOne
     @JoinColumn(name = "juego_id")
@@ -47,15 +43,24 @@ public class Nivel {
     private List<Acertijo> acertijos = new ArrayList<>();
 
 
-    public Nivel(String nombre, String dificultad, String descripcion, Juego juego, boolean isProgress) {
+    public Nivel(String nombre, String dificultad, String descripcion, String requisitos, Long minimaCalificacionGanar, Juego juego) {
         this.nombre = nombre;
         this.dificultad = dificultad;
         this.descripcion = descripcion;
+        this.requisitos = requisitos;
+        this.minimaCalificacionGanar = minimaCalificacionGanar;
         this.juego = juego;
-        this.isProgress = isProgress;
     }
 
     public Nivel() {
+    }
+
+    public String getRequisitos() {
+        return requisitos;
+    }
+
+    public void setRequisitos(String requisitos) {
+        this.requisitos = requisitos;
     }
 
     public Long getMinimaCalificacionGanar() {
@@ -66,21 +71,8 @@ public class Nivel {
         this.minimaCalificacionGanar = minimaCalificacionGanar;
     }
 
-    public String getCalificacion() {
-        return Calificacion;
-    }
 
-    public void setCalificacion(String calificacion) {
-        Calificacion = calificacion;
-    }
 
-    public boolean isProgress() {
-        return isProgress;
-    }
-
-    public void setProgress(boolean progress) {
-        isProgress = progress;
-    }
 
     public List<Acertijo> getAcertijos() {
         return acertijos;

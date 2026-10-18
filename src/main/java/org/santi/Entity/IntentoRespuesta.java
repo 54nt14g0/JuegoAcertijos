@@ -9,7 +9,7 @@ public class IntentoRespuesta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean isTake;
+    @Column
     private String respuestaUsuario;
 
     @ManyToOne
@@ -30,19 +30,9 @@ public class IntentoRespuesta {
         this.respuestaUsuario = respuestaUsuario;
     }
 
-    public IntentoRespuesta(boolean isTake, Respuesta respuesta, Usuario usuario) {
-        this.isTake = isTake;
-        this.respuesta = respuesta;
-        this.usuario = usuario;
-    }
 
-    public boolean isTake() {
-        return isTake;
-    }
 
-    public void setTake(boolean take) {
-        isTake = take;
-    }
+
 
     public Long getId() {
         return id;

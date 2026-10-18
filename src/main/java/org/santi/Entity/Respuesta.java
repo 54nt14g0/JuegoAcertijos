@@ -12,8 +12,6 @@ public class Respuesta {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private boolean isCorrect;
 
     @Column
     private String descripcion;
@@ -44,8 +42,8 @@ public class Respuesta {
         this.descripcion = descripcion;
     }
 
-    public Respuesta(boolean isCorrect, String descripcion, String nombre, Acertijo acertijo) {
-        this.isCorrect = isCorrect;
+    public Respuesta( String descripcion, String nombre, Acertijo acertijo) {
+
         this.descripcion = descripcion;
         this.nombre = nombre;
         this.acertijo = acertijo;
@@ -81,13 +79,7 @@ public class Respuesta {
         this.id = id;
     }
 
-    public boolean isCorrect() {
-        return isCorrect;
-    }
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
-    }
 
     public String getDescripcion() {
         return descripcion;
