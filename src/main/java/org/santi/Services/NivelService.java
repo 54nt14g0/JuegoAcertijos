@@ -9,7 +9,7 @@ public interface NivelService {
 
 
     Acertijo obtenerAcertijo(Long idAcertijo);
-    List<Acertijo> obtenerAcertijos();
+    List<Acertijo> obtenerAcertijos(Long idNivel);
     String borrarAcertijo (Long idAcertijo);
     Acertijo crearAcertijo (String nombre, String descripcion, Long idNivel);
     String actualizarAcertijo (Long idAcertijo, String nombre, String descripcion);

@@ -1,4 +1,11 @@
 package org.santi.Repository;
 
-public class AcertijoRepository {
+import org.santi.Entity.Acertijo;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AcertijoRepository extends JpaRepository <Acertijo, Long> {
+
+
+
+
 }

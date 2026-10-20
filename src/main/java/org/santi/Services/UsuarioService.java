@@ -1,5 +1,6 @@
 package org.santi.Services;
 
+import org.santi.Entity.Acertijo;
 import org.santi.Entity.IntentoRespuesta;
 import org.santi.Entity.Respuesta;
 
@@ -13,13 +14,13 @@ public interface UsuarioService {
 
     String borrarCuenta (Long idUsuario);
     String actualizarDatosUsuario (Long idUsuario, String nombre, String email, LocalDate fechaNacimiento);
-
+    String cambiarPass(Long idUsuario, String newPass);
 
 
 // Aquí se calculan las estadísticas personales del usuario y se muestran
     String verEstadisticasPersonales (Long idUsuario);
 //Aquí se selecciona el nivel y se valida si el progreso es el correcto para que el usuario lo pueda jugar
-    String jugarNivel(Long idUsuario, Long idNivel);
+    List<Acertijo> jugarNivel(Long idUsuario, Long idNivel);
 
 // Debe asegurarse de que el sujeto pase con calificacion requrida por el nivel para sumarlo al progreso
     // debe también permitir repetir el nivel, por lo que debe verificar si YA lo pasó, para no repetir el nombre

@@ -32,7 +32,7 @@ public class Nivel {
     private String requisitos;
 
     @Column
-    private Long minimaCalificacionGanar;
+    private Float minimaCalificacionGanar;
 
 
     @ManyToOne
@@ -43,7 +43,7 @@ public class Nivel {
     private List<Acertijo> acertijos = new ArrayList<>();
 
 
-    public Nivel(String nombre, String dificultad, String descripcion, String requisitos, Long minimaCalificacionGanar, Juego juego) {
+    public Nivel(String nombre, String dificultad, String descripcion, String requisitos, Float minimaCalificacionGanar, Juego juego) {
         this.nombre = nombre;
         this.dificultad = dificultad;
         this.descripcion = descripcion;
@@ -63,11 +63,11 @@ public class Nivel {
         this.requisitos = requisitos;
     }
 
-    public Long getMinimaCalificacionGanar() {
+    public Float getMinimaCalificacionGanar() {
         return minimaCalificacionGanar;
     }
 
-    public void setMinimaCalificacionGanar(Long minimaCalificacionGanar) {
+    public void setMinimaCalificacionGanar(Float minimaCalificacionGanar) {
         this.minimaCalificacionGanar = minimaCalificacionGanar;
     }
 
