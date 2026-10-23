@@ -29,7 +29,7 @@ public class Usuario {
     @JoinColumn(name = "juego_id")
     private Juego juego;
 
-    @OneToMany (mappedBy = "intentoRespuesta")
+    @OneToMany (mappedBy = "usuario")
     private List<IntentoRespuesta> intentos = new ArrayList<>();
 
 

@@ -9,9 +9,14 @@ public class IntentoRespuesta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Esto es lo que el USUARIO digita o selecciona
+    // Si es escrita 'e' contiene la palabra
+    // Si es seleccion multiple 'sm' contiene '' vacío si no la responde o 'x' si si
+    // Si es 'mr' lo mismo que 'sm'
     @Column
     private String respuestaUsuario;
 
+    //Esto es la RESPUESTA asociada
     @ManyToOne
     @JoinColumn (name = "respuesta_id")
     private Respuesta respuesta;
@@ -19,6 +24,10 @@ public class IntentoRespuesta {
     @ManyToOne
     @JoinColumn (name = "usuario_id")
     private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn (name = "acertijo_id")
+    private Acertijo acertijo;
 
 
     public IntentoRespuesta() {

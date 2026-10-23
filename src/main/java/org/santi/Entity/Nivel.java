@@ -25,12 +25,15 @@ public class Nivel {
     @Column
     private String descripcion;
 
+    @Column
+    private int cantidadAcertijos;
 
 
     //Aquí va un string con los nombres de los niveles RQEUISITO para que este nivel pueda jugarse
     @Column
     private String requisitos;
 
+    // Numero del 0.01 al 1 representando el porcentaje
     @Column
     private Float minimaCalificacionGanar;
 
@@ -39,7 +42,7 @@ public class Nivel {
     @JoinColumn(name = "juego_id")
     private Juego juego;
 
-    @OneToMany (mappedBy = "acertijo")
+    @OneToMany (mappedBy = "nivel")
     private List<Acertijo> acertijos = new ArrayList<>();
 
 
@@ -72,7 +75,13 @@ public class Nivel {
     }
 
 
+    public int getCantidadAcertijos() {
+        return cantidadAcertijos;
+    }
 
+    public void setCantidadAcertijos(int cantidadAcertijos) {
+        this.cantidadAcertijos = cantidadAcertijos;
+    }
 
     public List<Acertijo> getAcertijos() {
         return acertijos;

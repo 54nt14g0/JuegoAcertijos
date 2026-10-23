@@ -1,4 +1,14 @@
 package org.santi.Repository;
 
-public class IntentoRespuestaRepository {
+import org.santi.Entity.IntentoRespuesta;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface IntentoRespuestaRepository extends JpaRepository<IntentoRespuesta, Long> {
+
+
+
+
+
 }

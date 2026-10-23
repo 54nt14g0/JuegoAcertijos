@@ -8,10 +8,13 @@ import java.util.List;
 public interface JuegoService {
 
 
+
+    Juego  obtenerJuego(Long id);
+
     String verEstadisticasGlobales();
 
     // CRUD niveles
-    List<Nivel> obtenerNiveles();
+    List<Nivel> obtenerNiveles(Long idJuego);
     Nivel obtenerNivelById (Long idNivel);
     String eliminarNivel (Long idNivel);
     Nivel crearNivel (String nombre, String dificultad, String descripcion, String requisitos, Long minimaCalificacionGanar, Long idJuego);

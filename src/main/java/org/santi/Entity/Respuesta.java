@@ -20,10 +20,15 @@ public class Respuesta {
     private String imagenRespuesta;
 
 
+    // Indica la respuesta que DEBERIA ser, la que si el usuario la escoge esa es la correcta
+    // En caso de ser de tipo escrita 'e' debe ser la palabra o frase
+    // en caso de ser 'sm" seleccion mútiple, debe tener 'true' si es la correcta o false si no
+    // Si es 'mr' multiple respuesta la misma cosa que 'sm'
+
     @Column
     private String respuestaCorrecta;
 
-    // Esto se refiere a si es la respuesta 'a' o 'b' por ejemplo
+
     @Column
     private String nombre;
 
@@ -31,7 +36,7 @@ public class Respuesta {
     @JoinColumn (name = "acertijo_id")
     private Acertijo acertijo;
 
-    @OneToMany (mappedBy = "intentoRespuesta")
+    @OneToMany (mappedBy = "respuesta")
     private List<IntentoRespuesta> intentos = new ArrayList<>();
 
 

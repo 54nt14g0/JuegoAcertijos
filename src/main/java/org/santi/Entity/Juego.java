@@ -19,10 +19,10 @@ public class Juego {
     @Column
     private String musicaMenu;
 
-    @OneToMany(mappedBy = "nivel")
+    @OneToMany(mappedBy = "juego")
     private List<Nivel> niveles = new ArrayList<>();
 
-    @OneToMany (mappedBy = "usuario")
+    @OneToMany (mappedBy = "juego")
     private List <Usuario> usuarios = new ArrayList<>();
 
 

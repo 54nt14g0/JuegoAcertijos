@@ -37,13 +37,16 @@ public class NivelServiceImpl implements NivelService {
         return listaAcertijos;
     }
 
+
+    // cuando se borra uno se debe restar el atributo cantidadAcertijos del NIvel
     @Override
     public String borrarAcertijo(Long idAcertijo) {
         return "";
     }
 
+    // cuando se crea uno se debe incrementar el atributo cantidadAcertijos del NIvel
     @Override
-    public Acertijo crearAcertijo(String nombre, String descripcion, Long idNivel) {
+    public Acertijo crearAcertijo(String nombre, String descripcion, String tipoAcertijo, Long idNivel) {
         return null;
     }
 

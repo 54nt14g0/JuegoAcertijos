@@ -1,14 +1,13 @@
 package org.santi.Services.impl;
 
-import org.santi.Entity.Acertijo;
-import org.santi.Entity.IntentoRespuesta;
-import org.santi.Entity.Nivel;
-import org.santi.Entity.Usuario;
+import org.santi.Entity.*;
 import org.santi.Exception.CorreoYaRegistradoException;
+import org.santi.Exception.UserNotFoundException;
 import org.santi.Repository.NivelRepository;
 import org.santi.Repository.UsuarioRepository;
 import org.santi.Services.AuthService;
 import org.santi.Services.UsuarioService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ import java.util.Optional;
 public class UsuarioServiceImpl implements UsuarioService {
 
 
-private final UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final NivelRepository nivelRepository;
     private final NivelServiceImpl nivelService;
@@ -37,9 +36,9 @@ private final UsuarioRepository usuarioRepository;
     @Override
     public String borrarCuenta(Long idUsuario) {
 
-        String mensaje ="No se pudo borrar, id incorrecta";
+        String mensaje = "No se pudo borrar, id incorrecta";
 
-        if (usuarioRepository.existsById(idUsuario)!= true){
+        if (usuarioRepository.existsById(idUsuario) != true) {
             usuarioRepository.deleteById(idUsuario);
             mensaje = "se ha eliminado su cuetna con éxito";
         }
@@ -62,9 +61,9 @@ private final UsuarioRepository usuarioRepository;
 
         usuario.setNombre(nombre);
 
-        if (usuarioRepository.existsByEmail(email) == false){
+        if (usuarioRepository.existsByEmail(email) == false) {
             usuario.setEmail(email);
-        }else{
+        } else {
             throw new CorreoYaRegistradoException("este nuevo correo que quiere actualizar YA existe en el sistema");
         }
 
@@ -93,7 +92,6 @@ private final UsuarioRepository usuarioRepository;
     }
 
 
-
     @Override
     public String verEstadisticasPersonales(Long idUsuario) {
         return "";
@@ -113,12 +111,12 @@ private final UsuarioRepository usuarioRepository;
                         )
                 );
 
-        Nivel nivel = nivelRepository.findById(idNivel).orElseThrow(()->
-                new IllegalArgumentException ("No se pudo encontrr el Nivel"));
+        Nivel nivel = nivelRepository.findById(idNivel).orElseThrow(() ->
+                new IllegalArgumentException("No se pudo encontrr el Nivel"));
 
-        boolean puedeJuagarNivel = verificarProgreso( usuario, idNivel);
+        boolean puedeJuagarNivel = verificarProgreso(usuario, idNivel);
 
-        if (puedeJuagarNivel != false){
+        if (puedeJuagarNivel != false) {
 
             acertijos = (ArrayList<Acertijo>) nivelService.obtenerAcertijos(idNivel);
 
@@ -134,27 +132,27 @@ private final UsuarioRepository usuarioRepository;
 
         String userLevels = usuario.getProgreso();
 
-        Nivel nivel= nivelRepository.findById(idNivel).orElseThrow(()->
+        Nivel nivel = nivelRepository.findById(idNivel).orElseThrow(() ->
                 new IllegalArgumentException("no se encontró el nivel"));
 
-        String nameLevel =  nivel.getNombre();
-        String reqLevel= nivel.getRequisitos();
+        String nameLevel = nivel.getNombre();
+        String reqLevel = nivel.getRequisitos();
 
-        String [] levelsWin = userLevels.split(";");
-        String [] levelsReq = reqLevel.split(";");
+        String[] levelsWin = userLevels.split(";");
+        String[] levelsReq = reqLevel.split(";");
 
         int contador = 0;
         boolean isWin = false;
 
 
-        if (reqLevel.equals("")){
+        if (reqLevel.equals("")) {
 
             isWin = true;
-        }else{
+        } else {
 
-            for (int i = 0; i<levelsReq.length;i++ ){
+            for (int i = 0; i < levelsReq.length; i++) {
 
-                for (int j = 0; j<levelsWin.length; j++) {
+                for (int j = 0; j < levelsWin.length; j++) {
 
                     if (levelsReq[i].equalsIgnoreCase(levelsWin[j])) {
 
@@ -163,17 +161,15 @@ private final UsuarioRepository usuarioRepository;
                 }
             }
 
-            if (contador == levelsReq.length){
+            if (contador == levelsReq.length) {
                 isWin = true;
             }
         }
 
 
-
-    return isWin;
+        return isWin;
 
     }
-
 
 
     // Este metodo verifica la puntuación obtenida y si pasa la puntuacion requerida se considera GANADO
@@ -181,10 +177,107 @@ private final UsuarioRepository usuarioRepository;
     @Override
     public String terminarNivel(Long idUsuario, Long idNivel, List<IntentoRespuesta> intentos) {
 
-        
 
-        return "";
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() ->
+                new UserNotFoundException("No se encontró el usuario"));
+
+        Nivel nivel = nivelRepository.findById(idNivel).orElseThrow(() ->
+                new IllegalArgumentException("No se encontró el nivel"));
+
+
+        String mensaje = "Lo lamentamos, no ha pasado el nivel, no alcanzó la puntuación necesaria";
+        Float calificacionNivel = (float) 0;
+
+        calificacionNivel = calificarIntentoUsuario(usuario, nivel, intentos);
+
+        if (calificacionNivel >= nivel.getMinimaCalificacionGanar()) {
+
+            mensaje = "Felicidades, ha coronado el NIVEL !!";
+
+            if (usuario.getProgreso().equals("") || usuario.getProgreso() == null) {
+
+                usuario.setProgreso(nivel.getNombre());
+                usuarioRepository.save(usuario);
+            } else {
+                String temp = usuario.getProgreso();
+                usuario.setProgreso(temp + ";" + nivel.getNombre());
+                usuarioRepository.save(usuario);
+            }
+
+        }
+
+
+        return mensaje;
     }
+
+    private Float calificarIntentoUsuario(Usuario usuario, Nivel nivel, List<IntentoRespuesta> intentos) {
+
+        // tener a mano todos los acertijos
+        // de cada acertijo tener a mano CADA respuesta y su correspondiente intento
+        // la operación es tomar las buenas por acertijo y multiplicarlas por el peso, luego sumar todo
+
+        ArrayList<Acertijo> acertijos = new ArrayList<>(nivelService.obtenerAcertijos(nivel.getId()));
+
+        Float calificacion = (float) 0;
+
+
+        for (int i = 0; i < intentos.size(); i++) {
+
+            for (int j = 0; j < acertijos.size(); j++) {
+
+                Float temp = (float) 0;
+
+                ArrayList<Respuesta> respuestasAcertijo = new ArrayList<>(acertijos.get(j).getRespuestas());
+
+                for (int k = 0; k < respuestasAcertijo.size(); k++) {
+
+                    Long idRespuestaAsociada = intentos.get(i).getRespuesta().getId();
+                    Long idRespuesta = respuestasAcertijo.get(k).getId();
+
+                    if (idRespuestaAsociada.equals(idRespuesta)) {
+
+                        String tipoAcertijo = acertijos.get(j).getTipoAcertijo();
+
+                        Respuesta respuesta = respuestasAcertijo.get(k);
+                        IntentoRespuesta intento = intentos.get(i);
+
+
+                        //'e' = escrito , 'sm' = seleccion multiple , 'mr' = multiples respuestas
+                        if (tipoAcertijo.equalsIgnoreCase("e")) {
+
+                            if (respuesta.getRespuestaCorrecta().equalsIgnoreCase(intento.getRespuestaUsuario())) {
+
+                                temp += 1;
+                            }
+                        }
+
+                        if (tipoAcertijo.equalsIgnoreCase("sm") || tipoAcertijo.equalsIgnoreCase("mr")) {
+
+                            if (respuesta.getRespuestaCorrecta().equalsIgnoreCase("true")
+                                    && intento.getRespuestaUsuario().equalsIgnoreCase("x")) {
+
+                                temp += 1;
+                            }
+
+                        }
+
+                    }
+
+
+                }
+
+                calificacion += (temp / acertijos.get(j).getCantidadCorrectas()) * acertijos.get(j).getPeso();
+            }
+        }
+        return calificacion;
+
+    }
+
+
+
+
+
+
 
     @Override
     public IntentoRespuesta intentar(Long idUsuario, Long idRespuesta, String respuestaIntento) {
